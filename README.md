@@ -1,4 +1,4 @@
-# BurpSuite Match Replace 
+# BurpSuite Match & Replace 
 BurpSuite Match & Replace Rules For Different UseCases
 
 ## Finding hidden buttons, forms, and other UI elements
