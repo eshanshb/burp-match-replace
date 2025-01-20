@@ -1,0 +1,142 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "API Vulnerability - Test for Insecure API Authentication",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer fake-jwt-token"  // Test with fake JWT token
+            },
+            {
+                "comment": "API Vulnerability - Modify API Key to Attempt Unauthorized Access",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-API-Key:.*$",
+                "string_replace": "X-API-Key: fake-api-key"  // Try to use a fake API key to access endpoints
+            },
+            {
+                "comment": "API Vulnerability - Modify User ID for IDOR (Insecure Direct Object Reference)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^user_id=.*$",
+                "string_replace": "user_id=9999"  // Modify user ID to access another user's data
+            },
+            {
+                "comment": "API Vulnerability - Modify Request Body for SQL Injection (POST Method)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "' OR 1=1 --",
+                "string_replace": "'%20OR%201%3D1%20--"  // Test for SQL injection in request body (POST)
+            },
+            {
+                "comment": "API Vulnerability - Test for Command Injection in API Endpoint",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "echo test",
+                "string_replace": "echo%20test%20%7C%20id"  // Inject shell command via API request body
+            },
+            {
+                "comment": "API Vulnerability - Test for Cross-Site Scripting (XSS) in API Responses",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "<script>alert('XSS')</script>",
+                "string_replace": "%3Cscript%3Ealert%28%27XSS%27%29%3C%2Fscript%3E"  // XSS attempt in request body
+            },
+            {
+                "comment": "API Vulnerability - Test for Path Traversal in File Upload Endpoint",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "../etc/passwd",
+                "string_replace": "%2E%2E%2Fetc%2Fpasswd"  // Path traversal attempt for file access
+            },
+            {
+                "comment": "API Vulnerability - Modify Timestamp for Replay Attack",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^timestamp=.*$",
+                "string_replace": "timestamp=1234567890"  // Modify timestamp for replay attack
+            },
+            {
+                "comment": "API Vulnerability - Test for Insecure Rate-Limiting (Heavy Requests)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/api/v1/endpoint",
+                "string_replace": "/api/v1/endpoint?heavy_request=true"  // Test for API rate-limiting vulnerabilities
+            },
+            {
+                "comment": "API Vulnerability - Test for Insufficient Input Validation in API Parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^username=.*$",
+                "string_replace": "username=<script>alert('XSS')</script>"  // Inject XSS payload in parameter
+            },
+            {
+                "comment": "API Vulnerability - Test for Insufficient Output Encoding (Reflected XSS)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "<script>alert('XSS')</script>",
+                "string_replace": "<script>alert('XSS')</script>"  // Reflected XSS vulnerability in API response
+            },
+            {
+                "comment": "API Vulnerability - Test for Missing Authorization (Access Control)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/admin/.*$",
+                "string_replace": "/admin/access"  // Attempt to access an admin endpoint without proper authorization
+            },
+            {
+                "comment": "API Vulnerability - Test for Sensitive Data Exposure (Unencrypted Token)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer unencrypted-token"  // Test with an unencrypted or weakly encrypted token
+            },
+            {
+                "comment": "API Vulnerability - Test for Unrestricted API Method Exposure",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/admin/.*$",
+                "string_replace": "/api/v1/admin/delete?user_id=1"  // Test for unauthorized method access via URL manipulation
+            },
+            {
+                "comment": "API Vulnerability - Test for JSON Injection (Malicious JSON Payload)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "{\"username\":\"user\", \"password\":\"password\"}",
+                "string_replace": "{\"username\":\"user\", \"password\":\"password\",\"is_admin\":true}"  // JSON injection to escalate privileges
+            },
+            {
+                "comment": "API Vulnerability - Test for Unvalidated Redirects in API",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "redirect_url=",
+                "string_replace": "redirect_url=http://evil.com"  // Test for open redirect vulnerability via API parameter
+            },
+            {
+                "comment": "API Vulnerability - Test for Lack of Encryption in API Data Transmission",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "http://",
+                "string_replace": "https://"  // Test if data is transmitted in clear text over HTTP instead of HTTPS
+            }
+        ]
+    }
+}

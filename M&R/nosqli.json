@@ -1,0 +1,62 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "NoSQLi payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: ",
+                "string_replace": "Referer: {'$ne': null}"
+            },
+            {
+                "comment": "NoSQLi payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "User-Agent: ",
+                "string_replace": "User-Agent: {'$gt': ''}"
+            },
+            {
+                "comment": "NoSQLi payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: ",
+                "string_replace": "Cookie: session={'$regex': '.*'}"
+            },
+            {
+                "comment": "NoSQLi payload in query parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "={'$ne': null}"
+            },
+            {
+                "comment": "NoSQLi payload in URL fragments",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_uri",
+                "string_match": "#",
+                "string_replace": "#{'$gt': ''}"
+            },
+            {
+                "comment": "NoSQLi payload in JSON body",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "\".*\":.*",
+                "string_replace": "\"nosqli_payload\":{\"$ne\":null}"
+            },
+            {
+                "comment": "NoSQLi payload in POST parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "={'$regex': '.*'}"
+            }
+        ]
+    }
+}

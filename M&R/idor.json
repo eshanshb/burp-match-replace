@@ -1,0 +1,142 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for IDOR - Accessing Another User's Data via user_id",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^user_id=.*$",
+                "string_replace": "user_id=9999"  // Modify user_id to access another user's data
+            },
+            {
+                "comment": "Test for IDOR - Accessing Profile Data via user_id Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/profile/.*$",
+                "string_replace": "/user/profile/1001"  // Access a different user's profile by modifying the user_id
+            },
+            {
+                "comment": "Test for IDOR - Accessing Order Information via order_id Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/order/details/.*$",
+                "string_replace": "/order/details/12345"  // Modify order_id to access another user's order details
+            },
+            {
+                "comment": "Test for IDOR - Accessing API Endpoint with Modified Object ID",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/resource/.*$",
+                "string_replace": "/api/v1/resource/9999"  // Try to access a resource with a manipulated object ID
+            },
+            {
+                "comment": "Test for IDOR - Accessing Sensitive Files by Modifying File ID",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/files/.*$",
+                "string_replace": "/files/secret_file.txt"  // Modify file ID or path to access unauthorized files
+            },
+            {
+                "comment": "Test for IDOR - Accessing Other Users' Invoices",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/invoice/.*$",
+                "string_replace": "/user/invoice/9876"  // Manipulate invoice ID to access another user's invoice
+            },
+            {
+                "comment": "Test for IDOR - Modifying User's Address Information via user_id",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/address/.*$",
+                "string_replace": "/user/address/1001"  // Modify the user_id to alter another user's address information
+            },
+            {
+                "comment": "Test for IDOR - Accessing Admin's Settings",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/admin/settings/.*$",
+                "string_replace": "/admin/settings/1"  // Attempt to access admin settings by modifying the URL
+            },
+            {
+                "comment": "Test for IDOR - Modify Access Control List (ACL) by Changing Object ID",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/acl/.*$",
+                "string_replace": "/api/v1/acl/101"  // Modify ACL object ID to access or change access control settings
+            },
+            {
+                "comment": "Test for IDOR - Accessing Project Data via project_id Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/project/details/.*$",
+                "string_replace": "/project/details/2023"  // Manipulate project_id to access another project’s data
+            },
+            {
+                "comment": "Test for IDOR - Accessing Booking Details via booking_id Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/booking/details/.*$",
+                "string_replace": "/booking/details/34567"  // Modify booking_id to access other users’ booking information
+            },
+            {
+                "comment": "Test for IDOR - Accessing Subscription Data via subscription_id Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/subscription/.*$",
+                "string_replace": "/user/subscription/7777"  // Modify subscription_id to access another user's subscription
+            },
+            {
+                "comment": "Test for IDOR - Modifying Data of a Non-Own Resource via API ID",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^resource_id=.*$",
+                "string_replace": "resource_id=1234"  // Modify resource_id to change data that belongs to another user
+            },
+            {
+                "comment": "Test for IDOR - Deleting Other User's Resource via resource_id",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/resource/delete/.*$",
+                "string_replace": "/resource/delete/101"  // Attempt to delete a resource belonging to another user
+            },
+            {
+                "comment": "Test for IDOR - Accessing Another User's Profile Pictures via profile_pic_id",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/profile_pic/.*$",
+                "string_replace": "/user/profile_pic/9999"  // Modify profile_pic_id to access another user's profile picture
+            },
+            {
+                "comment": "Test for IDOR - Modifying User's Email via user_id",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"user_id\": \"123\"",
+                "string_replace": "\"user_id\": \"999\"  // Modify the user_id in request body to change email or other details
+            },
+            {
+                "comment": "Test for IDOR - Accessing Sensitive Document via document_id",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/documents/.*$",
+                "string_replace": "/documents/sensitive_document.pdf"  // Modify document_id to access a document the user shouldn't have access to
+            }
+        ]
+    }
+}

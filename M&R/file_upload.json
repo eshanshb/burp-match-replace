@@ -1,0 +1,151 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Insecure File Upload - Uploading Malicious PHP File",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.php\""  // Attempt to upload a PHP file
+            },
+            {
+                "comment": "Test for Insecure File Upload - Uploading a Malicious Web Shell",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"shell.php\""  // Upload a PHP shell file to test if it gets executed
+            },
+            {
+                "comment": "Test for File Upload with Dangerous MIME Type",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Content-Type: image/jpeg",
+                "string_replace": "Content-Type: application/x-php"  // Change MIME type to PHP for a non-PHP file
+            },
+            {
+                "comment": "Test for File Upload with Executable File Extension (e.g., .exe, .bat)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.exe\""  // Upload an executable file to test if the system allows it
+            },
+            {
+                "comment": "Test for Uploading Large Malicious File",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"large_malicious_file.php\""  // Upload a large PHP file to test the system's handling of file size
+            },
+            {
+                "comment": "Test for Uploading a Hidden File (e.g., .htaccess, .env)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\".env\""  // Try uploading hidden files (e.g., .env, .htaccess)
+            },
+            {
+                "comment": "Test for Uploading a Malicious SVG File (for potential XSS)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.svg\""  // Upload an SVG file containing XSS payloads
+            },
+            {
+                "comment": "Test for Uploading a Malicious JavaScript File",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.js\""  // Upload a JS file containing malicious code
+            },
+            {
+                "comment": "Test for Uploading a PDF File with Embedded Malicious Payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.pdf\""  // Upload a PDF file with embedded malicious JavaScript
+            },
+            {
+                "comment": "Test for Uploading a Malicious Document (e.g., DOCX with Macros)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.docx\""  // Upload a DOCX file containing macros or other malicious payloads
+            },
+            {
+                "comment": "Test for Uploading a Large File with Executable Code",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious_large_file.exe\""  // Test large file uploads that might contain executable payloads
+            },
+            {
+                "comment": "Test for Uploading a File with Double Extensions (e.g., .php.jpg)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.php.jpg\""  // Test if file extension tricks (double extensions) bypass file filters
+            },
+            {
+                "comment": "Test for Uploading a File with a Valid Image Extension but Malicious Content (e.g., image.jpg with PHP code)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"image.jpg\""  // Upload a file with a valid image extension, but contains PHP code inside
+            },
+            {
+                "comment": "Test for Uploading File with Malicious Content but Renamed Extension (e.g., .php -> .txt)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"malicious.txt\""  // Rename a malicious file to bypass file extension filters
+            },
+            {
+                "comment": "Test for Uploading File to a Restricted Directory (e.g., /var/www/uploads)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/upload/.*$",
+                "string_replace": "/upload/../../../../etc/passwd"  // Attempt directory traversal to upload a file outside the intended directory
+            },
+            {
+                "comment": "Test for Uploading File with Insecure Content-Type",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Content-Type: image/png",
+                "string_replace": "Content-Type: application/x-msdownload"  // Change the content-type to an executable or dangerous type
+            },
+            {
+                "comment": "Test for File Upload with Script Injection in Image File",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\".*$",
+                "string_replace": "filename=\"image_with_script.jpg\""  // Upload an image file containing script payload (e.g., base64-encoded JavaScript)
+            },
+            {
+                "comment": "Test for Uploading File via API with Arbitrary Extension (e.g., .js, .php)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/upload/.*$",
+                "string_replace": "/api/v1/upload/malicious.js"  // Upload a JavaScript file using an API endpoint
+            }
+        ]
+    }
+}
+

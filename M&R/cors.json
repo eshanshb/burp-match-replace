@@ -1,0 +1,86 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Inject malicious Origin header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Origin:.*$",
+                "string_replace": "Origin: http://evil-site.com"
+            },
+            {
+                "comment": "Inject malicious Referer header with CORS exploit",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: http://evil-site.com"
+            },
+            {
+                "comment": "Inject malicious X-Requested-With header for CORS exploitation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Requested-With:.*$",
+                "string_replace": "X-Requested-With: XMLHttpRequest"
+            },
+            {
+                "comment": "Inject malicious Access-Control-Request-Method header for CORS exploitation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Access-Control-Request-Method:.*$",
+                "string_replace": "Access-Control-Request-Method: GET"
+            },
+            {
+                "comment": "Inject malicious Access-Control-Request-Headers header for CORS exploitation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Access-Control-Request-Headers:.*$",
+                "string_replace": "Access-Control-Request-Headers: X-Custom-Header"
+            },
+            {
+                "comment": "Inject a CORS payload into the Access-Control-Allow-Origin header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_header",
+                "string_match": "^Access-Control-Allow-Origin:.*$",
+                "string_replace": "Access-Control-Allow-Origin: *"
+            },
+            {
+                "comment": "Inject Access-Control-Allow-Methods header with wildcard",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_header",
+                "string_match": "^Access-Control-Allow-Methods:.*$",
+                "string_replace": "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"
+            },
+            {
+                "comment": "Inject Access-Control-Allow-Headers header with custom header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_header",
+                "string_match": "^Access-Control-Allow-Headers:.*$",
+                "string_replace": "Access-Control-Allow-Headers: X-Custom-Header"
+            },
+            {
+                "comment": "Test CORS with malicious Origin and headers",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Origin:.*$",
+                "string_replace": "Origin: http://evil-site.com"
+            },
+            {
+                "comment": "Test CORS with an arbitrary Access-Control-Allow-Origin response header",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "response_header",
+                "string_match": "^Access-Control-Allow-Origin:.*$",
+                "string_replace": "Access-Control-Allow-Origin: http://evil-site.com"
+            }
+        ]
+    }
+}

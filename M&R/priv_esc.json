@@ -1,0 +1,126 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Privilege Escalation by Modifying User ID Parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "user_id=12345",
+                "string_replace": "user_id=admin"  // Modify user_id parameter to escalate privilege to admin.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Changing Role Parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "role=user",
+                "string_replace": "role=admin"  // Change role from user to admin to test for privilege escalation.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Modifying Authorization Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer admin_token"  // Attempt to escalate privileges by using a stolen or forged admin token.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Manipulating Session Cookie",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: .*session_id=.*",
+                "string_replace": "Cookie: session_id=admin_session_token"  // Inject an admin session cookie to escalate privileges.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Manipulating Account Status",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "account_status=user",
+                "string_replace": "account_status=admin"  // Modify account status to gain admin privileges.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Tampering with Access Control Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "access_level=user",
+                "string_replace": "access_level=admin"  // Modify access level to gain unauthorized admin privileges.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Forging a Role Change Request",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "change_role=user",
+                "string_replace": "change_role=admin"  // Simulate a request to change user role to admin.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Modifying User Permissions",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "permissions=view",
+                "string_replace": "permissions=admin"  // Modify permissions in the body to escalate privileges.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Injecting Admin Access in Request Body",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "access_level=user",
+                "string_replace": "access_level=admin"  // Inject a value of `admin` into an access control parameter in the request body.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Bypassing Access Controls via URL Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/admin/settings?user_id=12345",
+                "string_replace": "/admin/settings?user_id=admin_user_id"  // Access admin settings by modifying the user ID in the URL.
+            },
+            {
+                "comment": "Test for Privilege Escalation via Unprotected Admin Actions",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/admin/delete_user?user_id=12345",
+                "string_replace": "/admin/delete_user?user_id=admin_user_id"  // Attempt to delete an admin user by manipulating the user ID in the request URL.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Modifying Administrative Request",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/admin/user_management?action=view&user_id=12345",
+                "string_replace": "/admin/user_management?action=view&user_id=admin"  // Access or modify admin user management by modifying user ID in the URL.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Forging Admin Credentials in URL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "credentials=user",
+                "string_replace": "credentials=admin"  // Attempt to bypass authentication by forging admin credentials.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Modifying User Permissions via URL Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "permissions=user",
+                "string_replace": "permissions=admin"  // Test for privilege escalation by injecting `admin` permissions into the URL.
+            },
+            {
+                "comment": "Test for Privilege Escalation by Escalating Access via HTTP Headers",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "X-User-Role: user",
+                "string_replace": "X-User-Role: admin"  // Inject a custom header to escalate user role from `user` to `admin`.
+            }
+        ]
+    }
+}

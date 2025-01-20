@@ -1,0 +1,111 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Authorization Bypass - Modify Role to Admin (Role Escalation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^role=.*$",
+                "string_replace": "role=admin"
+            },
+            {
+                "comment": "Authorization Bypass - Modify User ID to Another User's ID (IDOR)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^user_id=.*$",
+                "string_replace": "user_id=9999"  // Assuming 9999 is an admin or another user's ID
+            },
+            {
+                "comment": "Authorization Bypass - Modify Resource ID to Access Restricted Resource",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^resource_id=.*$",
+                "string_replace": "resource_id=9999"  // Accessing an unauthorized resource ID
+            },
+            {
+                "comment": "Authorization Bypass - Modify JWT Token to Access Another User's Data",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer fake-jwt-token-for-user"
+            },
+            {
+                "comment": "Authorization Bypass - Modify Session Cookie to Hijack Session",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_cookie",
+                "string_match": "^session=.*$",
+                "string_replace": "session=fake-session-id"
+            },
+            {
+                "comment": "Authorization Bypass - Test with Modified User Role in Request",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^role=.*$",
+                "string_replace": "role=superuser"  // Attempting to escalate privilege
+            },
+            {
+                "comment": "Authorization Bypass - Attempt to Access Admin Panel with Low Privileges",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/admin/.*$",
+                "string_replace": "/admin/access"
+            },
+            {
+                "comment": "Authorization Bypass - Modify User Permission Level in Request",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^permission_level=.*$",
+                "string_replace": "permission_level=admin"
+            },
+            {
+                "comment": "Authorization Bypass - Try Accessing Restricted API Endpoint",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/admin/.*$",
+                "string_replace": "/api/v1/admin/restricted-endpoint"
+            },
+            {
+                "comment": "Authorization Bypass - Test with Empty or Invalid Authorization Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization:"
+            },
+            {
+                "comment": "Authorization Bypass - Attempt to Access Admin Endpoint via Altered Role",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^role=.*$",
+                "string_replace": "role=admin"
+            },
+            {
+                "comment": "Authorization Bypass - Modify IP Address or Origin Header for Bypass",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Forwarded-For:.*$",
+                "string_replace": "X-Forwarded-For: 192.168.1.100"  // Spoofing the IP to access internal resources
+            },
+            {
+                "comment": "Authorization Bypass - Modify API Key to Another User's Key",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-API-Key:.*$",
+                "string_replace": "X-API-Key: fake-api-key-for-user"
+            }
+        ]
+    }
+}
+

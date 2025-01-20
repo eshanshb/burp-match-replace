@@ -1,0 +1,118 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Cache Poisoning with Malicious User-Agent",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "User-Agent: .*",
+                "string_replace": "User-Agent: malicious-agent"  // Inject a malicious User-Agent to see if the server caches content based on it
+            },
+            {
+                "comment": "Test for Cache Poisoning via Accept-Language Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Accept-Language: .*",
+                "string_replace": "Accept-Language: en-US,en;q=0.9"  // Modify Accept-Language to potentially bypass cache rules or serve poisoned content based on language preferences
+            },
+            {
+                "comment": "Test for Cache Poisoning with Malicious Referrer",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: .*",
+                "string_replace": "Referer: http://malicious.com"  // Modify Referer header to see if content is cached based on referrer, potentially serving malicious content
+            },
+            {
+                "comment": "Test for Cache Poisoning with X-Forwarded-For Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "X-Forwarded-For: .*",
+                "string_replace": "X-Forwarded-For: 127.0.0.1"  // Modify X-Forwarded-For header to test if the application caches content based on IP address
+            },
+            {
+                "comment": "Test for Cache Poisoning via Custom Query Parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "page=home",
+                "string_replace": "page=home&user=malicious_user"  // Modify a query parameter to check if it results in cache poisoning based on user-specific data
+            },
+            {
+                "comment": "Test for Cache Poisoning with Cookie Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: .*",
+                "string_replace": "Cookie: session=malicious_session_token"  // Inject a malicious session token in cookies to test for cache poisoning based on session information
+            },
+            {
+                "comment": "Test for Cache Poisoning via Cache-Control Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cache-Control: .*",
+                "string_replace": "Cache-Control: no-cache"  // Modify Cache-Control header to see if the application caches a response despite cache directives
+            },
+            {
+                "comment": "Test for Cache Poisoning via Authorization Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: .*",
+                "string_replace": "Authorization: Bearer fake_token"  // Modify the Authorization header to see if cache variations are created based on authentication state
+            },
+            {
+                "comment": "Test for Cache Poisoning with Custom HTTP Method",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Method: GET",
+                "string_replace": "Method: POST"  // Test for cache poisoning with a non-standard HTTP method (POST instead of GET) to check if cache differentiation is broken
+            },
+            {
+                "comment": "Test for Cache Poisoning with Path Parameter Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/products/",
+                "string_replace": "/products/poisoned_item"  // Manipulate the URL path to target cache poisoning based on specific items or pages
+            },
+            {
+                "comment": "Test for Cache Poisoning with Case Sensitivity in URLs",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/home",
+                "string_replace": "/Home"  // Test case-sensitivity in URLs and see if the cache treats different cases as separate entries, potentially leading to cache poisoning
+            },
+            {
+                "comment": "Test for Cache Poisoning with Malformed Request Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "product_id=12345",
+                "string_replace": "product_id=<malicious_payload>"  // Test for cache poisoning via malformed or malicious query parameters
+            },
+            {
+                "comment": "Test for Cache Poisoning via Content-Type Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Content-Type: .*",
+                "string_replace": "Content-Type: application/x-www-form-urlencoded"  // Test for cache poisoning by altering the Content-Type header to check if content is cached differently based on content type
+            },
+            {
+                "comment": "Test for Cache Poisoning in Fragment Identifier",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "#section1",
+                "string_replace": "#poisoned_section"  // Test for caching issues related to fragment identifiers in URLs, which can sometimes be used to inject malicious content
+            }
+        ]
+    }
+}

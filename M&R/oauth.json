@@ -1,0 +1,142 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for OAuth Token Leakage in URL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "access_token=.*",
+                "string_replace": "access_token=INVALID_TOKEN"  // Attempt to leak or manipulate the access token in the URL to test for improper token handling
+            },
+            {
+                "comment": "Test for Access Token Interception in Authorization Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer INVALID_TOKEN"  // Attempt to intercept or modify the Authorization header to test token validation
+            },
+            {
+                "comment": "Test for CSRF Attack on OAuth Authorization Code Flow",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "code=.*",
+                "string_replace": "code=ATTACKER_CODE"  // Attempt to exploit a CSRF vulnerability by injecting a forged authorization code
+            },
+            {
+                "comment": "Test for Improper OAuth Scopes and Privileges",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"scope\": \".*\"",
+                "string_replace": "\"scope\": \"admin email offline_access\""  // Test for scope escalation by requesting higher-privileged scopes than expected
+            },
+            {
+                "comment": "Test for Using OAuth Implicit Flow to Access User Data Without Proper Validation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "access_token=.*",
+                "string_replace": "access_token=IMPLICIT_TOKEN"  // Attempt to use an implicit flow token to access resources without validation
+            },
+            {
+                "comment": "Test for OAuth Token Replay Attack",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer REPLAYED_TOKEN"  // Attempt to replay a valid OAuth token to test for token re-use vulnerabilities
+            },
+            {
+                "comment": "Test for Access Token Expiry Validation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer EXPIRED_TOKEN"  // Attempt to use an expired token to check if the system properly handles token expiry
+            },
+            {
+                "comment": "Test for OAuth Token Revocation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer REVOKED_TOKEN"  // Test with a revoked token to check if the system respects token revocation
+            },
+            {
+                "comment": "Test for Client ID and Secret Leakage",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "client_id=.*",
+                "string_replace": "client_id=ATTACKER_CLIENT_ID"  // Attempt to inject a fake client ID to test for client misconfiguration or leakage
+            },
+            {
+                "comment": "Test for OAuth Token Hijacking via Session Fixation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "access_token=.*",
+                "string_replace": "access_token=HIJACKED_TOKEN"  // Try to hijack an OAuth token by manipulating session or redirect parameters
+            },
+            {
+                "comment": "Test for Bypassing Token Validation by Modifying Redirect URI",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "redirect_uri=.*",
+                "string_replace": "redirect_uri=http://attacker.com"  // Manipulate the redirect URI to potentially bypass OAuth flow or redirect to malicious sites
+            },
+            {
+                "comment": "Test for OAuth Token Introspection Endpoint Abuse",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/introspect",
+                "string_replace": "/introspect?token=INVALID_TOKEN"  // Test token introspection endpoints by sending invalid or manipulated tokens
+            },
+            {
+                "comment": "Test for OAuth Authorization Code Exchange Attack (Code Injection)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"code\": \".*\"",
+                "string_replace": "\"code\": \"INVALID_OR_ATTACKER_CODE\""  // Try to exchange an invalid authorization code to test for code injection or validation issues
+            },
+            {
+                "comment": "Test for Weak Redirect URI Validation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "redirect_uri=.*",
+                "string_replace": "redirect_uri=http://malicious.com"  // Check if OAuth server properly validates redirect URIs to prevent open redirect vulnerabilities
+            },
+            {
+                "comment": "Test for OAuth Authorization Code Grant Flow Token Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "code=.*",
+                "string_replace": "code=ATTACKER_CODE"  // Manipulate the authorization code during the OAuth code grant flow to see if it leads to unauthorized access
+            },
+            {
+                "comment": "Test for Multiple Authorization Codes (Code Reuse)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "code=.*",
+                "string_replace": "code=REUSED_CODE"  // Attempt to reuse an authorization code to test for flaws in token issuance or code validation
+            },
+            {
+                "comment": "Test for OAuth Implicit Flow with Insufficient Client Secret Validation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "client_secret=.*",
+                "string_replace": "client_secret=FAKE_SECRET"  // Test if the implicit flow is vulnerable to client secret validation issues
+            }
+        ]
+    }
+}

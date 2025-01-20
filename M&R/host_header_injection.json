@@ -1,0 +1,138 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Host Header Injection",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: malicious.com"  // Test by modifying the Host header to a malicious domain to see if the application mishandles it
+            },
+            {
+                "comment": "Test for Host Header Poisoning Attack",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: victim.com\\r\\nX-Forwarded-Host: attacker.com"  // Attempt to poison the Host header to spoof the original domain and inject a malicious domain in the X-Forwarded-Host
+            },
+            {
+                "comment": "Test for Redirect to Malicious Site via Host Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: attacker.com"  // Modify the Host header to an attacker-controlled domain to test for open redirects or improper redirects
+            },
+            {
+                "comment": "Test for HTTP Response Splitting via Host Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: vulnerable.com\\r\\nX-Forwarded-Host: attacker.com"  // Attempt an HTTP response splitting attack by injecting malicious headers using the Host header
+            },
+            {
+                "comment": "Test for Cache Poisoning Attack via Host Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: poisoned.com"  // Inject a poisoned Host header to test if it can cause cache poisoning or response discrepancies
+            },
+            {
+                "comment": "Test for Subdomain Takeover via Host Header Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: subdomain.vulnerable.com"  // Test for potential subdomain takeover by injecting a Host header pointing to a subdomain that is no longer in use but still part of a vulnerable domain
+            },
+            {
+                "comment": "Test for Host Header Injection Leading to Improper Authentication",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: attacker.com"  // Modify the Host header to simulate potential unauthorized access if authentication is mishandled based on the Host header
+            },
+            {
+                "comment": "Test for Host Header Injection with User Input",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "username=.*",
+                "string_replace": "username=attacker&Host: injected.com"  // Attempt to inject a Host header while submitting a form or input to simulate a user input scenario
+            },
+            {
+                "comment": "Test for Host Header Injection in API Endpoints",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: api.attacker.com"  // Modify the Host header to target API endpoints and test if it causes issues such as API routing problems or information leakage
+            },
+            {
+                "comment": "Test for Host Header Injection in Redirect URI",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: victim.com\\r\\nLocation: http://attacker.com"  // Modify the Host header to see if it triggers redirection to a malicious website or exposes sensitive data
+            },
+            {
+                "comment": "Test for Host Header Injection Leading to Insecure Content Delivery",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Host: .*",
+                "string_replace": "Host: content.vulnerable.com"  // Test to see if an injected Host header could bypass content security mechanisms and deliver insecure content
+            },
+            {
+                "comment": "Inject X-Forwarded-Host header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Forwarded-Host: evil.com"
+            },
+            {
+                "comment": "Inject X-Host header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Host: evil.com"
+            },
+            {
+                "comment": "Inject X-Original-Host header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Original-Host: evil.com"
+            },
+            {
+                "comment": "Inject Forwarded header with Host",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "Forwarded: host=evil.com"
+            },
+            {
+                "comment": "Inject payload into query parameter (Host-like value)",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "=.*",
+                "string_replace": "=evil.com"
+            },
+            {
+                "comment": "Inject Host header payload into JSON body",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "\".*\":.*",
+                "string_replace": "\"host_payload\":\"evil.com\""
+            }
+        ]
+    }
+}

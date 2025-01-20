@@ -1,0 +1,94 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for CSRF by Injecting Malicious Referer Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Referer: .*",
+                "string_replace": "Referer: http://attacker.com"  // Modify the Referer header to simulate a malicious referrer.
+            },
+            {
+                "comment": "Test for CSRF by Modifying Origin Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Origin: .*",
+                "string_replace": "Origin: http://attacker.com"  // Modify the Origin header to test CSRF protections based on origin.
+            },
+            {
+                "comment": "Test for CSRF by Modifying Cookie Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Cookie: .*",
+                "string_replace": "Cookie: session=malicious_session_token"  // Inject a fake session cookie to simulate an unauthorized request.
+            },
+            {
+                "comment": "Test for CSRF by Crafting a Malicious Form Submission",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "csrf_token=.*",
+                "string_replace": "csrf_token=malicious_token"  // Inject a malicious CSRF token into form data.
+            },
+            {
+                "comment": "Test for CSRF by Modifying Reflected CSRF Token",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "csrf_token=.*",
+                "string_replace": "csrf_token=malicious_token"  // Modify a reflected CSRF token to simulate an attack.
+            },
+            {
+                "comment": "Test for CSRF by Sending Malicious Request with Malicious Data",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "action=submit",
+                "string_replace": "action=submit&csrf_token=malicious_token"  // Inject a malicious action parameter along with a forged CSRF token.
+            },
+            {
+                "comment": "Test for CSRF by Crafting a Malicious URL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/account/settings?user_id=12345",
+                "string_replace": "/account/settings?user_id=attacker_user_id&csrf_token=malicious_token"  // Modify URL parameters to simulate a malicious CSRF attack.
+            },
+            {
+                "comment": "Test for CSRF by Using POST with Reflected CSRF Token",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "POST",
+                "string_replace": "POST&csrf_token=malicious_token"  // Attempt a CSRF attack using POST with a forged token.
+            },
+            {
+                "comment": "Test for CSRF with Custom Form Data and Cookie Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "amount=100",
+                "string_replace": "amount=1000&csrf_token=malicious_token"  // Modify form fields with malicious values and inject a fake CSRF token.
+            },
+            {
+                "comment": "Test for CSRF by Modifying URL Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "redirect_url=somepath",
+                "string_replace": "redirect_url=http://attacker.com?csrf_token=malicious_token"  // Craft a URL with a malicious redirect to simulate CSRF.
+            },
+            {
+                "comment": "Test for CSRF by Crafting Malicious GET Request with Sensitive Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/change-password?user_id=12345",
+                "string_replace": "/change-password?user_id=attacker_user_id&csrf_token=malicious_token"  // Modify GET request parameters to test CSRF vulnerability.
+            }
+        ]
+    }
+}

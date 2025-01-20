@@ -1,0 +1,78 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "JWT Signature Algorithm Manipulation (none)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<payload>.<signature>"
+            },
+            {
+                "comment": "JWT Signature Algorithm Manipulation (none) - Change algorithm to none",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header_with_none_algorithm>.<payload>.<signature>"
+            },
+            {
+                "comment": "JWT Token Forgery - Modify the 'sub' (subject) claim to bypass authorization",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<modified_payload_with_sub_claim>.<signature>"
+            },
+            {
+                "comment": "JWT Token Forgery - Modify 'exp' (expiration) claim to set token as valid forever",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<payload_with_exp_claim_far_future>.<signature>"
+            },
+            {
+                "comment": "JWT Token Manipulation - Modify 'iat' (issued at) claim to issue a future token",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<payload_with_future_iat_claim>.<signature>"
+            },
+            {
+                "comment": "JWT Attack - Modify JWT payload to inject custom claims",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<payload_with_custom_claims>.<signature>"
+            },
+            {
+                "comment": "JWT Attack - Change token's aud (audience) claim to bypass authorization checks",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<payload_with_modified_aud_claim>.<signature>"
+            },
+            {
+                "comment": "JWT Attack - Change token's iss (issuer) claim to impersonate another user",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <header>.<payload_with_modified_iss_claim>.<signature>"
+            },
+            {
+                "comment": "JWT Attack - Replace token with custom JWT",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer.*$",
+                "string_replace": "Authorization: Bearer <custom_fake_jwt_token>"
+            }
+        ]
+    }
+}

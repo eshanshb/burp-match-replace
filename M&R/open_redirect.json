@@ -1,0 +1,86 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Inject open redirect payload in Referer header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Referer:.*$",
+                "string_replace": "Referer: http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in User-Agent header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^User-Agent:.*$",
+                "string_replace": "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in Cookie header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Cookie:.*$",
+                "string_replace": "Cookie: session=123456; redirect_url=http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in query parameter",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "url=.*$",
+                "string_replace": "url=http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in POST body (for form submission)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "<form>.*</form>",
+                "string_replace": "<form><input type='text' name='redirect' value='http://evil-site.com'></form>"
+            },
+            {
+                "comment": "Inject open redirect payload in URI fragment",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Fragment:.*$",
+                "string_replace": "Fragment: http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in X-Forwarded-For header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Forwarded-For:.*$",
+                "string_replace": "X-Forwarded-For: 127.0.0.1, http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in Accept-Language header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Accept-Language:.*$",
+                "string_replace": "Accept-Language: en-US, http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in Authorization header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization: Basic YWRtaW46cGFzc3dvcmQ=; http://evil-site.com"
+            },
+            {
+                "comment": "Inject open redirect payload in response body (test response manipulation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "<body>.*</body>",
+                "string_replace": "<body><a href='http://evil-site.com'>Click here</a></body>"
+            }
+        ]
+    }
+}

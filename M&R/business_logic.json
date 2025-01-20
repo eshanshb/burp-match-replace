@@ -1,0 +1,142 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Bypassing Payment Flow by Modifying Amount",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"amount\": \".*\"",
+                "string_replace": "\"amount\": \"9999999\""  // Attempt to manipulate the payment amount to an unusually high value to bypass limits or validation
+            },
+            {
+                "comment": "Test for Bypassing Purchase Limits",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"purchase_limit\": \".*\"",
+                "string_replace": "\"purchase_limit\": \"1000\""  // Test for bypassing purchase limits by manipulating request parameters
+            },
+            {
+                "comment": "Test for Changing User Role via Request",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"user_role\": \".*\"",
+                "string_replace": "\"user_role\": \"admin\""  // Test for escalating user privileges by modifying the user role parameter
+            },
+            {
+                "comment": "Test for Changing Order Status to 'Completed'",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"order_status\": \".*\"",
+                "string_replace": "\"order_status\": \"completed\""  // Test for bypassing order processing flow by changing order status to 'completed'
+            },
+            {
+                "comment": "Test for Skipping Authorization Check by Changing Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"authorization_token\": \".*\"",
+                "string_replace": "\"authorization_token\": \"fake_token\""  // Try to bypass authorization by providing a fake authorization token
+            },
+            {
+                "comment": "Test for Skipping Account Locking on Multiple Failed Login Attempts",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"failed_login_attempts\": \".*\"",
+                "string_replace": "\"failed_login_attempts\": \"0\""  // Reset the failed login attempts to 0 to bypass account locking mechanisms
+            },
+            {
+                "comment": "Test for Bypassing Discount Application",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"discount_code\": \".*\"",
+                "string_replace": "\"discount_code\": \"FREE100\""  // Inject a fake discount code to bypass legitimate discount application
+            },
+            {
+                "comment": "Test for Manipulating Cart Quantity to Reduce Price",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"cart_quantity\": \".*\"",
+                "string_replace": "\"cart_quantity\": \"99999\""  // Modify the cart quantity to an excessive number to see if the application allows it without properly validating the total price
+            },
+            {
+                "comment": "Test for Bypassing Refund Workflow",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"refund_amount\": \".*\"",
+                "string_replace": "\"refund_amount\": \"9999999\""  // Attempt to bypass refund workflows by manipulating the refund amount to an unrealistic value
+            },
+            {
+                "comment": "Test for Accessing Unprivileged Data by Changing User ID",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "user_id=.*",
+                "string_replace": "user_id=attacker_user_id"  // Test for unauthorized access to another user's data by modifying the `user_id` parameter
+            },
+            {
+                "comment": "Test for Bypassing Reservation Time Constraints",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"reservation_time\": \".*\"",
+                "string_replace": "\"reservation_time\": \"2025-12-31T23:59:59\""  // Modify the reservation time to bypass any business logic time constraints
+            },
+            {
+                "comment": "Test for Bypassing Account Verification Process",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"account_verified\": \".*\"",
+                "string_replace": "\"account_verified\": \"true\""  // Test for bypassing account verification steps by setting the verification status to 'true'
+            },
+            {
+                "comment": "Test for Bypassing Consent Management Flow",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"consent_status\": \".*\"",
+                "string_replace": "\"consent_status\": \"granted\""  // Manipulate consent status to bypass consent management checks
+            },
+            {
+                "comment": "Test for Manipulating Payment Gateway Response",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "response_body",
+                "string_match": "\"payment_status\": \".*\"",
+                "string_replace": "\"payment_status\": \"successful\""  // Test for altering payment gateway responses in the application to simulate a successful payment when it's not
+            },
+            {
+                "comment": "Test for Modifying Subscription Tier",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"subscription_tier\": \".*\"",
+                "string_replace": "\"subscription_tier\": \"premium\""  // Manipulate the subscription tier parameter to gain unauthorized access to premium content
+            },
+            {
+                "comment": "Test for Bypassing Coupon Expiry Date",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"coupon_expiry\": \".*\"",
+                "string_replace": "\"coupon_expiry\": \"2025-12-31\""  // Change the expiry date of a coupon to bypass the expiration check and apply expired discounts
+            },
+            {
+                "comment": "Test for Manipulating Fund Transfer Amount",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"transfer_amount\": \".*\"",
+                "string_replace": "\"transfer_amount\": \"999999999\""  // Modify the transfer amount to an excessively large value to test if the system properly validates transfers
+            }
+        ]
+    }
+}

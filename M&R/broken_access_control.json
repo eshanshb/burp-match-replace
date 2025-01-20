@@ -1,0 +1,158 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment": "Test for Insecure Direct Object Reference (IDOR)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^user_id=.*$",
+                "string_replace": "user_id=9999"  // Change user_id to access another user's data
+            },
+            {
+                "comment": "Test for Unrestricted Admin Access (URL Manipulation)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/admin/.*$",
+                "string_replace": "/admin/delete?user_id=1"  // Attempt to access an admin endpoint without proper privileges
+            },
+            {
+                "comment": "Test for Accessing User Data with Improper Authorization",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/.*$",
+                "string_replace": "/user/1001"  // Modify the URL to access another user's data
+            },
+            {
+                "comment": "Test for Missing Access Control on API Resources",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/private/.*$",
+                "string_replace": "/api/v1/private/resource"  // Try accessing a protected API resource without authorization
+            },
+            {
+                "comment": "Test for Unauthorized Admin Actions via Query Parameters",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_parameter",
+                "string_match": "^is_admin=.*$",
+                "string_replace": "is_admin=true"  // Manipulate a query parameter to escalate privileges (e.g., to admin)
+            },
+            {
+                "comment": "Test for Insecure URL-based Role Escalation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/profile/.*$",
+                "string_replace": "/user/profile/admin"  // Access admin profile by changing the URL
+            },
+            {
+                "comment": "Test for Accessing Files without Proper Authorization",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/files/.*$",
+                "string_replace": "/files/sensitive_file.txt"  // Access a sensitive file without authorization
+            },
+            {
+                "comment": "Test for API Endpoint Access Control via Method Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_method",
+                "string_match": "POST",
+                "string_replace": "DELETE"  // Attempt to change a POST request to DELETE to access restricted actions
+            },
+            {
+                "comment": "Test for Access Control in File Uploads",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "filename=\"user_document.pdf\"",
+                "string_replace": "filename=\"admin_document.pdf\""  // Try uploading a file as an admin (or accessing admin file)
+            },
+            {
+                "comment": "Test for Access Control Bypass with JWT Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_header",
+                "string_match": "^Authorization: Bearer .*",
+                "string_replace": "Authorization: Bearer fake-jwt-token"  // Test for broken access control by using a fake JWT token
+            },
+            {
+                "comment": "Test for Access Control by Modifying User Roles",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_body",
+                "string_match": "\"role\":\"user\"",
+                "string_replace": "\"role\":\"admin\""  // Modify the role parameter in the body to escalate privileges to admin
+            },
+            {
+                "comment": "Test for Horizontal Privilege Escalation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "/user/data?user_id=101",
+                "string_replace": "/user/data?user_id=102"  // Access another user's data by modifying user_id
+            },
+            {
+                "comment": "Test for Vertical Privilege Escalation via URL",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/admin/.*$",
+                "string_replace": "/user/admin/delete"  // Attempt to access admin actions via URL manipulation
+            },
+            {
+                "comment": "Test for Missing Access Control on Internal Admin API",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/api/v1/admin/.*$",
+                "string_replace": "/api/v1/admin/data"  // Attempt to access admin API resources without authorization
+            },
+            {
+                "comment": "Test for Broken Access Control via Cookie Manipulation",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_cookie",
+                "string_match": "role=user",
+                "string_replace": "role=admin"  // Modify cookie to escalate privileges (from user to admin)
+            },
+            {
+                "comment": "Test for Insecure Access Control on User Settings",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/user/settings/.*$",
+                "string_replace": "/user/settings?user_id=1001"  // Try to modify settings of another user
+            },
+            {
+                "comment": "Test for Access Control on URL Parameters (Admin Access)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/admin/users/.*$",
+                "string_replace": "/admin/users/1"  // Try to access an admin resource by modifying URL parameter
+            },
+            {
+                "comment": "Test for Access Control via HTTP Method Manipulation (GET to POST)",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_method",
+                "string_match": "GET",
+                "string_replace": "POST"  // Attempt to manipulate the HTTP method to bypass access control
+            },
+            {
+                "comment": "Test for Access Control with Insecure Webhooks",
+                "enabled": true,
+                "is_simple_match": true,
+                "rule_type": "request_url",
+                "string_match": "^/webhook/.*$",
+                "string_replace": "/webhook/secure_action"  // Try to trigger a secure action via a public webhook endpoint
+            }
+        ]
+    }
+}

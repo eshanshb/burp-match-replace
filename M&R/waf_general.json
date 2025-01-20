@@ -1,0 +1,118 @@
+{
+    "proxy": {
+        "match_replace_rules": [
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Forwarded-Host:: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Forwarded-By: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Forwarded-Scheme: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Forwarded-Port: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Frame-Options: Allow"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Forwarded-For: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Client-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Real-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Originating-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Remote-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Remote-Addr: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"X-Cluster-Client-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"True-Client-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"Client-IP: 127.0.0.1"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"Origin: null"
+            },
+            {
+                "comment":"Bypass WAF",
+                "enabled":true,
+                "is_simple_match":true,
+                "rule_type":"request_header",
+                "string_replace":"Origin: Domain.attacker.com"
+            }            
+        ]
+    }
+}
